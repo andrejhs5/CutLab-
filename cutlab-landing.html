@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CutLab — Video Editing, Elevated</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --cream: #f2ede6;
+      --amber: #e8a130;
+      --amber-dark: #c4861c;
+      --white: #ffffff;
+      --muted: #6b6459;
+      --border: rgba(242,237,230,0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      width: 12px; height: 12px;
+      background: var(--amber);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+      mix-blend-mode: difference;
+    }
+    .cursor.hover { width: 40px; height: 40px; background: var(--amber); }
+
+    /* Noise overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.35;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 60px;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.9), transparent);
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.06em;
+      color: var(--cream);
+      text-decoration: none;
+    }
+    .logo span { color: var(--amber); }
+
+    nav a.nav-cta {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--black);
+      background: var(--amber);
+      padding: 10px 22px;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    nav a.nav-cta:hover { background: var(--amber-dark); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 160px 60px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 80% 40%, rgba(232,161,48,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 50% at 10% 80%, rgba(232,161,48,0.04) 0%, transparent 60%);
+    }
+
+    .hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-label::before {
+      content: '';
+      width: 32px; height: 1px;
+      background: var(--amber);
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(72px, 10vw, 150px);
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      max-width: 900px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      font-family: 'DM Serif Display', serif;
+      color: var(--amber);
+    }
+
+    .hero-sub {
+      margin-top: 40px;
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: #a89f94;
+      max-width: 480px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.6s forwards;
+    }
+
+    .hero-actions {
+      margin-top: 56px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.8s forwards;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--black);
+      background: var(--amber);
+      padding: 16px 36px;
+      border: none;
+      border-radius: 2px;
+      cursor: none;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--amber-dark); transform: translateY(-2px); }
+
+    .hero-note {
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* Scroll marquee */
+    .marquee-wrap {
+      margin-top: 80px;
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 0;
+      opacity: 0;
+      animation: fadeUp 0.9s 1s forwards;
+    }
+    .marquee-track {
+      display: flex;
+      gap: 0;
+      animation: scroll 20s linear infinite;
+      width: max-content;
+    }
+    .marquee-item {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 0 40px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 15px;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .marquee-item span { color: var(--amber); font-size: 20px; }
+
+    @keyframes scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* FEATURES */
+    .section {
+      padding: 140px 60px;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 64px;
+    }
+    .section-label::before {
+      content: '';
+      width: 32px; height: 1px;
+      background: var(--amber);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2px;
+    }
+
+    .feature-card {
+      background: rgba(242,237,230,0.03);
+      border: 1px solid var(--border);
+      padding: 52px 44px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--amber);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .feature-card:hover { background: rgba(232,161,48,0.04); }
+    .feature-card:hover::before { transform: scaleX(1); }
+
+    .feature-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 72px;
+      line-height: 1;
+      color: rgba(232,161,48,0.12);
+      position: absolute;
+      top: 28px; right: 32px;
+      letter-spacing: -0.02em;
+    }
+
+    .feature-icon {
+      font-size: 28px;
+      margin-bottom: 28px;
+    }
+
+    .feature-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 24px;
+      line-height: 1.2;
+      color: var(--cream);
+      margin-bottom: 16px;
+    }
+
+    .feature-desc {
+      font-size: 15px;
+      line-height: 1.75;
+      color: #7a7069;
+    }
+
+    /* PROCESS */
+    .process-section {
+      padding: 0 60px 140px;
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+    }
+
+    .process-step {
+      padding: 48px 36px;
+      border-right: 1px solid var(--border);
+      position: relative;
+    }
+    .process-step:last-child { border-right: none; }
+
+    .step-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      color: var(--amber);
+      margin-bottom: 24px;
+    }
+
+    .step-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      color: var(--cream);
+      margin-bottom: 12px;
+    }
+
+    .step-desc {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    /* PRICING */
+    .pricing-section {
+      padding: 0 60px 140px;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2px;
+      margin-top: 16px;
+    }
+
+    .price-card {
+      background: rgba(242,237,230,0.03);
+      border: 1px solid var(--border);
+      padding: 52px 44px;
+      position: relative;
+    }
+    .price-card.featured {
+      background: var(--amber);
+      border-color: var(--amber);
+    }
+
+    .price-tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+    .price-card.featured .price-tag { color: rgba(10,10,10,0.6); }
+
+    .price-amount {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 64px;
+      line-height: 1;
+      color: var(--cream);
+      margin-bottom: 8px;
+    }
+    .price-card.featured .price-amount { color: var(--black); }
+
+    .price-cycle {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 36px;
+    }
+    .price-card.featured .price-cycle { color: rgba(10,10,10,0.6); }
+
+    .price-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 44px;
+    }
+    .price-features li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: #a89f94;
+    }
+    .price-card.featured .price-features li { color: rgba(10,10,10,0.75); }
+    .price-features li::before {
+      content: '✓';
+      color: var(--amber);
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .price-card.featured .price-features li::before { color: var(--black); }
+
+    /* WAITLIST */
+    .waitlist-section {
+      padding: 0 60px 160px;
+    }
+
+    .waitlist-inner {
+      background: rgba(242,237,230,0.03);
+      border: 1px solid var(--border);
+      padding: 100px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .waitlist-inner::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(232,161,48,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .waitlist-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 5vw, 80px);
+      line-height: 0.9;
+      color: var(--cream);
+      margin-bottom: 24px;
+    }
+
+    .waitlist-title em {
+      font-style: italic;
+      font-family: 'DM Serif Display', serif;
+      color: var(--amber);
+    }
+
+    .waitlist-desc {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+
+    .waitlist-count {
+      margin-top: 36px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .avatars {
+      display: flex;
+    }
+    .avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--black);
+      margin-right: -10px;
+      background: linear-gradient(135deg, #4a3f32, #7a6955);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--cream);
+    }
+    .count-text {
+      font-size: 13px;
+      color: var(--muted);
+      padding-left: 14px;
+    }
+    .count-text strong { color: var(--amber); }
+
+    /* Form */
+    .waitlist-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .form-input {
+      background: rgba(242,237,230,0.05);
+      border: 1px solid var(--border);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      padding: 14px 18px;
+      border-radius: 2px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      cursor: none;
+    }
+    .form-input::placeholder { color: rgba(242,237,230,0.2); }
+    .form-input:focus {
+      border-color: var(--amber);
+      background: rgba(232,161,48,0.04);
+    }
+
+    .form-select {
+      background: rgba(242,237,230,0.05);
+      border: 1px solid var(--border);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      padding: 14px 18px;
+      border-radius: 2px;
+      outline: none;
+      appearance: none;
+      cursor: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23e8a130' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+    }
+    .form-select option { background: #1a1a1a; }
+
+    .submit-btn {
+      background: var(--amber);
+      color: var(--black);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 18px 36px;
+      border: none;
+      border-radius: 2px;
+      cursor: none;
+      transition: background 0.2s, transform 0.15s;
+      margin-top: 8px;
+    }
+    .submit-btn:hover { background: var(--amber-dark); transform: translateY(-2px); }
+
+    .success-msg {
+      display: none;
+      background: rgba(232,161,48,0.08);
+      border: 1px solid rgba(232,161,48,0.3);
+      padding: 24px 28px;
+      border-radius: 2px;
+      text-align: center;
+    }
+    .success-msg.show { display: block; }
+    .success-msg strong {
+      display: block;
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+    .success-msg p { font-size: 14px; color: var(--muted); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    footer p { font-size: 13px; color: var(--muted); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s, transform 0.7s;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .hero { padding: 120px 24px 60px; }
+      .section { padding: 80px 24px; }
+      .process-section, .pricing-section, .waitlist-section { padding: 0 24px 80px; }
+      .features-grid, .process-grid, .pricing-grid { grid-template-columns: 1fr; }
+      .process-step { border-right: none; border-bottom: 1px solid var(--border); }
+      .waitlist-inner { grid-template-columns: 1fr; padding: 52px 28px; gap: 48px; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="logo">Cut<span>Lab</span></a>
+    <a href="#waitlist" class="nav-cta">Join Waitlist</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-label">Professional Video Editing Service</div>
+    <h1 class="hero-title">
+      Your footage.<br>
+      <em>Edited to</em><br>
+      Perfection.
+    </h1>
+    <p class="hero-sub">CutLab delivers broadcast-quality video editing for creators, brands, and agencies — fast turnarounds, no overhead.</p>
+    <div class="hero-actions">
+      <a href="#waitlist" class="btn-primary">
+        Get Early Access
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <span class="hero-note">Limited spots — launching Q3 2026</span>
+    </div>
+    <div class="marquee-wrap">
+      <div class="marquee-track" id="marquee">
+        <div class="marquee-item"><span>✦</span> Reels &amp; Short-Form</div>
+        <div class="marquee-item"><span>✦</span> Brand Films</div>
+        <div class="marquee-item"><span>✦</span> YouTube Channels</div>
+        <div class="marquee-item"><span>✦</span> Event Highlight Reels</div>
+        <div class="marquee-item"><span>✦</span> Podcast Clips</div>
+        <div class="marquee-item"><span>✦</span> Ad Creatives</div>
+        <div class="marquee-item"><span>✦</span> Motion Graphics</div>
+        <div class="marquee-item"><span>✦</span> Color Grading</div>
+        <div class="marquee-item"><span>✦</span> Reels &amp; Short-Form</div>
+        <div class="marquee-item"><span>✦</span> Brand Films</div>
+        <div class="marquee-item"><span>✦</span> YouTube Channels</div>
+        <div class="marquee-item"><span>✦</span> Event Highlight Reels</div>
+        <div class="marquee-item"><span>✦</span> Podcast Clips</div>
+        <div class="marquee-item"><span>✦</span> Ad Creatives</div>
+        <div class="marquee-item"><span>✦</span> Motion Graphics</div>
+        <div class="marquee-item"><span>✦</span> Color Grading</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section">
+    <div class="section-label">Why CutLab</div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-num">01</div>
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">48-Hour Turnaround</div>
+        <p class="feature-desc">Upload your footage, set your brief, and receive a polished cut within 48 hours. Rush delivery available for urgent campaigns.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-num">02</div>
+        <div class="feature-icon">🎬</div>
+        <div class="feature-title">Dedicated Editor</div>
+        <p class="feature-desc">You're assigned a consistent editor who learns your brand voice, style preferences, and visual language — no brief needed twice.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-num">03</div>
+        <div class="feature-icon">♾️</div>
+        <div class="feature-title">Unlimited Revisions</div>
+        <p class="feature-desc">Not happy? We revise until you are. No revision caps, no passive-aggressive invoices. Just results you're proud to publish.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-num">04</div>
+        <div class="feature-icon">📐</div>
+        <div class="feature-title">Every Format Covered</div>
+        <p class="feature-desc">One upload, every format. We export for Reels, TikTok, YouTube, LinkedIn, and TV-spec — all included in your plan.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-num">05</div>
+        <div class="feature-icon">🎨</div>
+        <div class="feature-title">Motion &amp; Graphics</div>
+        <p class="feature-desc">Lower thirds, animated titles, logo stings, kinetic text — our editors handle motion graphics in-house, no third-party delays.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-num">06</div>
+        <div class="feature-icon">🔒</div>
+        <div class="feature-title">Secure File Vault</div>
+        <p class="feature-desc">Your raw footage is encrypted and stored in your private project vault. Share and review directly in the platform, no Dropbox chaos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="process-section">
+    <div class="section-label">How It Works</div>
+    <div class="process-grid reveal">
+      <div class="process-step">
+        <div class="step-num">STEP 01</div>
+        <div class="step-title">Upload Your Footage</div>
+        <p class="step-desc">Drag your files into your secure CutLab vault. Any format accepted — we handle the rest.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">STEP 02</div>
+        <div class="step-title">Brief Your Editor</div>
+        <p class="step-desc">Fill a simple brief: mood, pacing, music, platform, deadlines. Or chat directly with your editor.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">STEP 03</div>
+        <div class="step-title">Review the Cut</div>
+        <p class="step-desc">Get a private review link. Leave timestamped comments. Approve or request changes — all in one place.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">STEP 04</div>
+        <div class="step-title">Download &amp; Publish</div>
+        <p class="step-desc">Download your finished files in every format, ready to go live. Zero compression, full resolution.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing-section">
+    <div class="section-label">Pricing</div>
+    <div class="pricing-grid">
+      <div class="price-card reveal">
+        <div class="price-tag">Creator</div>
+        <div class="price-amount">$299</div>
+        <div class="price-cycle">per month</div>
+        <ul class="price-features">
+          <li>8 videos per month</li>
+          <li>Up to 10 min per video</li>
+          <li>48-hr turnaround</li>
+          <li>All export formats</li>
+          <li>Unlimited revisions</li>
+        </ul>
+      </div>
+      <div class="price-card featured reveal">
+        <div class="price-tag">Brand</div>
+        <div class="price-amount">$699</div>
+        <div class="price-cycle">per month</div>
+        <ul class="price-features">
+          <li>Unlimited videos</li>
+          <li>Up to 30 min per video</li>
+          <li>24-hr turnaround</li>
+          <li>Motion graphics included</li>
+          <li>Dedicated editor</li>
+          <li>Priority support</li>
+        </ul>
+      </div>
+      <div class="price-card reveal">
+        <div class="price-tag">Agency</div>
+        <div class="price-amount">Custom</div>
+        <div class="price-cycle">tailored plan</div>
+        <ul class="price-features">
+          <li>Multi-client dashboard</li>
+          <li>White-label delivery</li>
+          <li>Same-day rush edits</li>
+          <li>Dedicated team</li>
+          <li>SLA guarantee</li>
+          <li>API access</li>
+        </ul>
+      </div>o
+    </div>
+  </section>
+
+  <!-- WAITLIST -->
+  <section class="waitlist-section" id="waitlist">
+    <div class="waitlist-inner reveal">
+      <div>
+        <h2 class="waitlist-title">
+          Be the<br>
+          <em>First</em><br>
+          to Cut.
+        </h2>
+        <p class="waitlist-desc">Join our early access waitlist and lock in a 30% founding member discount — yours for life. We're onboarding in batches starting Q3 2026.</p>
+        <div class="waitlist-count">
+          <div class="avatars">
+            <div class="avatar">AK</div>
+            <div class="avatar">MJ</div>
+            <div class="avatar">SR</div>
+            <div class="avatar">+</div>
+          </div>
+          <span class="count-text"><strong id="count">247</strong> creators already on the list</span>
+        </div>
+      </div>
+      <div>
+        <div id="waitlist-form-wrap">
+          <div class="waitlist-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">First Name</label>
+                <input class="form-input" type="text" id="fname" placeholder="Jordan" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Last Name</label>
+                <input class="form-input" type="text" id="lname" placeholder="Rivera" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input class="form-input" type="email" id="email" placeholder="you@brand.com" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">I am a...</label>
+              <select class="form-select form-input" id="role">
+                <option value="">Select your role</option>
+                <option>Content Creator / Influencer</option>
+                <option>Brand / Marketing Team</option>
+                <option>Agency / Freelancer</option>
+                <option>Podcaster</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Monthly video volume</label>
+              <select class="form-select form-input" id="volume">
+                <option value="">How many videos per month?</option>
+                <option>1–4 videos</option>
+                <option>5–15 videos</option>
+                <option>16–30 videos</option>
+                <option>30+ videos</option>
+              </select>
+            </div>
+            <button class="submit-btn" onclick="handleSubmit()">
+              Reserve My Spot →
+            </button>
+          </div>
+        </div>
+        <div class="success-msg" id="success">
+          <strong>You're on the list. 🎬</strong>
+          <p>We'll send your early access invite before public launch. Watch your inbox.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="#" class="logo">Cut<span>Lab</span></a>
+    <p>© 2026 CutLab. All rights reserved.</p>
+    <p>hello@cutlab.co</p>
+  </footer>
+
+  <script>
+    // Cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button, .feature-card, input, select').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Waitlist form
+    function handleSubmit() {
+      const fname = document.getElementById('fname').value.trim();
+      const email = document.getElementById('email').value.trim();
+      if (!fname || !email) {
+        document.getElementById('email').style.borderColor = '#e85530';
+        setTimeout(() => document.getElementById('email').style.borderColor = '', 1500);
+        return;
+      }
+      document.getElementById('waitlist-form-wrap').style.display = 'none';
+      document.getElementById('success').classList.add('show');
+      const countEl = document.getElementById('count');
+      countEl.textContent = parseInt(countEl.textContent) + 1;
+    }
+  </script>
+</body>
+</html>
