@@ -963,509 +963,68 @@
       }
     }
   </script>
-  <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CutLab — Client Testimonial</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+  <!-- TESTIMONIAL SECTION -->
+<section style="padding: 80px 20px; background: #080808;">
+  <div style="max-width: 780px; margin: 0 auto;">
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <div style="text-align:center; margin-bottom: 48px;">
+      <p style="font-family:'Space Mono',monospace; font-size:10px; letter-spacing:0.35em; color:#F5A623; text-transform:uppercase; margin-bottom:14px;">Client Results</p>
+      <h2 style="font-family:'Bebas Neue',sans-serif; font-size:clamp(38px,9vw,64px); color:#EEEDEA; line-height:0.95; margin-bottom:10px;">What Our <span style="color:#F5A623;">Clients Say</span></h2>
+      <p style="font-size:13px; color:#666;">Real feedback from real creators we've worked with.</p>
+    </div>
 
-  :root {
-    --black:  #080808;
-    --card:   #101010;
-    --card2:  #141414;
-    --border: #1C1C1C;
-    --b2:     #242424;
-    --amber:  #F5A623;
-    --amber2: #C8841A;
-    --amber3: #7A4F0A;
-    --white:  #EEEDEA;
-    --muted:  #666666;
-    --dim:    #2A2A2A;
-  }
+    <div style="background:#101010; border:1px solid #242424; border-radius:16px; overflow:hidden; position:relative; margin-bottom:14px;">
+      <div style="height:2px; background:linear-gradient(90deg,transparent,#F5A623,transparent);"></div>
+      <div style="padding:40px 32px 32px; position:relative;">
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:140px; line-height:0.7; color:#F5A623; opacity:0.07; position:absolute; top:20px; left:24px; pointer-events:none;">&#8220;</div>
 
-  body {
-    background: var(--black);
-    color: var(--white);
-    font-family: 'Inter', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 16px;
-  }
+        <div style="display:flex; gap:4px; margin-bottom:22px; position:relative; z-index:1; align-items:center;">
+          <span style="color:#F5A623; font-size:18px;">★★★★★</span>
+          <span style="font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.2em; color:#C8841A; text-transform:uppercase; margin-left:6px;">5 / 5 Rating</span>
+        </div>
 
-  /* ── OUTER WRAPPER ── */
-  .testimonial-section {
-    width: 100%;
-    max-width: 780px;
-  }
+        <p style="font-size:clamp(16px,3.5vw,21px); font-weight:400; line-height:1.65; color:#EEEDEA; position:relative; z-index:1; margin-bottom:28px;">
+          I had a <strong style="color:#F5A623; font-weight:600;">wonderful experience with CutLab.</strong>
+          Thank you for giving me the opportunity to be your first client.
+          It was a pleasure working with you, and I wish you
+          <strong style="color:#F5A623; font-weight:600;">continued success.</strong>
+        </p>
 
-  /* ── SECTION HEADER ── */
-  .section-top {
-    text-align: center;
-    margin-bottom: 48px;
-  }
+        <div style="height:1px; background:#1C1C1C; margin-bottom:22px;"></div>
 
-  .eyebrow {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.35em;
-    color: var(--amber);
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
-    margin-bottom: 18px;
-  }
-
-  .eyebrow::before,
-  .eyebrow::after {
-    content: '';
-    width: 40px;
-    height: 1px;
-    background: var(--amber3);
-  }
-
-  .section-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(38px, 9vw, 64px);
-    letter-spacing: 0.02em;
-    line-height: 0.95;
-    color: var(--white);
-    margin-bottom: 12px;
-  }
-
-  .section-title span {
-    color: var(--amber);
-  }
-
-  .section-sub {
-    font-size: 13px;
-    color: var(--muted);
-    letter-spacing: 0.02em;
-  }
-
-  /* ── MAIN TESTIMONIAL CARD ── */
-  .main-card {
-    background: var(--card);
-    border: 1px solid var(--b2);
-    border-radius: 16px;
-    overflow: hidden;
-    position: relative;
-    margin-bottom: 16px;
-  }
-
-  /* amber top bar */
-  .main-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--amber), transparent);
-  }
-
-  .card-inner {
-    padding: 40px 36px 36px;
-    position: relative;
-  }
-
-  /* giant quote mark */
-  .quote-mark {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 140px;
-    line-height: 0.7;
-    color: var(--amber);
-    opacity: 0.07;
-    position: absolute;
-    top: 20px;
-    left: 28px;
-    pointer-events: none;
-    user-select: none;
-  }
-
-  /* stars */
-  .stars {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 24px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .star {
-    width: 18px;
-    height: 18px;
-    background: var(--amber);
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-  }
-
-  .stars-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.2em;
-    color: var(--amber2);
-    text-transform: uppercase;
-    margin-left: 6px;
-    align-self: center;
-  }
-
-  /* quote text */
-  .quote-text {
-    font-size: clamp(16px, 3.5vw, 22px);
-    font-weight: 400;
-    line-height: 1.65;
-    color: var(--white);
-    position: relative;
-    z-index: 1;
-    margin-bottom: 32px;
-    letter-spacing: 0.01em;
-  }
-
-  .quote-text strong {
-    color: var(--amber);
-    font-weight: 600;
-  }
-
-  /* divider */
-  .card-divider {
-    height: 1px;
-    background: var(--border);
-    margin-bottom: 24px;
-  }
-
-  /* client info */
-  .client-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-
-  .client-info {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
-  .client-avatar {
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--amber2), var(--amber3));
-    border: 2px solid var(--amber);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px;
-    color: var(--black);
-    flex-shrink: 0;
-  }
-
-  .client-name {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--white);
-    letter-spacing: 0.01em;
-    margin-bottom: 3px;
-  }
-
-  .client-role {
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.03em;
-  }
-
-  .client-handle {
-    font-family: 'Space Mono', monospace;
-    font-size: 9px;
-    color: var(--amber2);
-    letter-spacing: 0.1em;
-    margin-top: 3px;
-  }
-
-  .verified-badge {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border-radius: 100px;
-    background: rgba(245,166,35,0.07);
-    border: 1px solid rgba(245,166,35,0.18);
-  }
-
-  .verified-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--amber);
-  }
-
-  .verified-text {
-    font-family: 'Space Mono', monospace;
-    font-size: 8px;
-    letter-spacing: 0.18em;
-    color: var(--amber);
-    text-transform: uppercase;
-  }
-
-  /* ── STAT STRIP ── */
-  .stat-strip {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
-  }
-
-  .stat-box {
-    background: var(--card2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 18px 16px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .stat-box::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--amber3), transparent);
-  }
-
-  .stat-val {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 32px;
-    color: var(--amber);
-    line-height: 1;
-    letter-spacing: 0.02em;
-    margin-bottom: 4px;
-  }
-
-  .stat-lbl {
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-family: 'Space Mono', monospace;
-  }
-
-  /* ── PROJECT DETAIL ── */
-  .project-detail {
-    background: var(--card2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 18px 20px;
-    margin-top: 12px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-
-  .project-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 8px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
-
-  .project-value {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--white);
-  }
-
-  .project-item {
-    flex: 1;
-    min-width: 100px;
-  }
-
-  .project-divider {
-    width: 1px;
-    height: 32px;
-    background: var(--border);
-    flex-shrink: 0;
-  }
-
-  /* ── CTA STRIP ── */
-  .cta-strip {
-    margin-top: 40px;
-    background: var(--card);
-    border: 1px solid var(--b2);
-    border-radius: 12px;
-    padding: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-
-  .cta-text h3 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 0.04em;
-    color: var(--white);
-    margin-bottom: 4px;
-  }
-
-  .cta-text p {
-    font-size: 12px;
-    color: var(--muted);
-  }
-
-  .cta-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--amber);
-    color: var(--black);
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 12px 22px;
-    border-radius: 6px;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: background 0.15s;
-  }
-
-  .cta-btn:hover { background: #e09420; }
-
-  .cta-arrow {
-    font-size: 14px;
-  }
-
-  @media (max-width: 520px) {
-    .card-inner { padding: 28px 20px 24px; }
-    .stat-strip { grid-template-columns: 1fr 1fr; }
-    .stat-strip .stat-box:last-child { grid-column: 1 / -1; }
-    .cta-strip { flex-direction: column; align-items: flex-start; }
-    .project-divider { display: none; }
-    .project-item { min-width: 45%; }
-  }
-</style>
-</head>
-<body>
-
-<section class="testimonial-section">
-
-  <!-- HEADER -->
-  <div class="section-top">
-    <div class="eyebrow">Client Results</div>
-    <div class="section-title">What Our<br><span>Clients Say</span></div>
-    <p class="section-sub">Real feedback from real creators we've worked with.</p>
-  </div>
-
-  <!-- MAIN TESTIMONIAL CARD -->
-  <div class="main-card">
-    <div class="card-inner">
-
-      <div class="quote-mark">"</div>
-
-      <!-- Stars -->
-      <div class="stars">
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <span class="stars-label">5 / 5 Rating</span>
-      </div>
-
-      <!-- Quote -->
-      <p class="quote-text">
-        I had a <strong>wonderful experience with CutLab.</strong>
-        Thank you for giving me the opportunity to be your first client.
-        It was a pleasure working with you, and I wish you
-        <strong>continued success.</strong>
-      </p>
-
-      <div class="card-divider"></div>
-
-      <!-- Client info row -->
-      <div class="client-row">
-        <div class="client-info">
-          <div class="client-avatar">BT</div>
-          <div>
-            <div class="client-name">Bhavya Tewari</div>
-            <div class="client-role">Storyteller & Content Creator</div>
-            <div class="client-handle">@_shetellstruth · Instagram</div>
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,#C8841A,#7A4F0A); border:2px solid #F5A623; display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue',sans-serif; font-size:18px; color:#080808; flex-shrink:0;">BT</div>
+            <div>
+              <div style="font-size:15px; font-weight:700; color:#EEEDEA; margin-bottom:3px;">Bhavya Tewari</div>
+              <div style="font-size:11px; color:#666;">Storyteller & Content Creator</div>
+              <div style="font-family:'Space Mono',monospace; font-size:9px; color:#C8841A; letter-spacing:0.1em; margin-top:3px;">@_shetellstruth · Instagram</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px; padding:6px 12px; border-radius:100px; background:rgba(245,166,35,0.07); border:1px solid rgba(245,166,35,0.18);">
+            <div style="width:6px; height:6px; border-radius:50%; background:#F5A623;"></div>
+            <span style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:0.18em; color:#F5A623; text-transform:uppercase;">Verified Client</span>
           </div>
         </div>
-        <div class="verified-badge">
-          <div class="verified-dot"></div>
-          <span class="verified-text">Verified Client</span>
-        </div>
       </div>
-
     </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+      <div style="background:#141414; border:1px solid #1C1C1C; border-radius:10px; padding:18px; text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:32px; color:#F5A623; line-height:1; margin-bottom:4px;">5★</div>
+        <div style="font-family:'Space Mono',monospace; font-size:9px; color:#666; letter-spacing:0.08em; text-transform:uppercase;">Client Rating</div>
+      </div>
+      <div style="background:#141414; border:1px solid #1C1C1C; border-radius:10px; padding:18px; text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:32px; color:#F5A623; line-height:1; margin-bottom:4px;">48H</div>
+        <div style="font-family:'Space Mono',monospace; font-size:9px; color:#666; letter-spacing:0.08em; text-transform:uppercase;">Turnaround</div>
+      </div>
+      <div style="background:#141414; border:1px solid #1C1C1C; border-radius:10px; padding:18px; text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:32px; color:#F5A623; line-height:1; margin-bottom:4px;">1ST</div>
+        <div style="font-family:'Space Mono',monospace; font-size:9px; color:#666; letter-spacing:0.08em; text-transform:uppercase;">Client · Done</div>
+      </div>
+    </div>
+
   </div>
-
-  <!-- STAT STRIP -->
-  <div class="stat-strip">
-    <div class="stat-box">
-      <div class="stat-val">5★</div>
-      <div class="stat-lbl">Client Rating</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-val">48H</div>
-      <div class="stat-lbl">Turnaround</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-val">1ST</div>
-      <div class="stat-lbl">Client · Done</div>
-    </div>
-  </div>
-
-  <!-- PROJECT DETAIL -->
-  <div class="project-detail">
-    <div class="project-item">
-      <div class="project-label">Project Type</div>
-      <div class="project-value">Hindi Storytelling · YouTube</div>
-    </div>
-    <div class="project-divider"></div>
-    <div class="project-item">
-      <div class="project-label">Deliverables</div>
-      <div class="project-value">Edit · Subtitles · Color Grade</div>
-    </div>
-    <div class="project-divider"></div>
-    <div class="project-item">
-      <div class="project-label">Platform</div>
-      <div class="project-value">YouTube · 1080p</div>
-    </div>
-  </div>
-
-  <!-- CTA STRIP -->
-  <div class="cta-strip">
-    <div class="cta-text">
-      <h3>Ready to be our next success story?</h3>
-      <p>Send us your raw footage. We'll handle the rest.</p>
-    </div>
-    <a href="https://andrejhs5.github.io/CutLab-" class="cta-btn">
-      Get Started <span class="cta-arrow">→</span>
-    </a>
-  </div>
-
 </section>
-
-</body>
-  </html>
-  
 </body>
 </html>
